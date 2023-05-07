@@ -37,7 +37,7 @@ const updateUser = async (req: Request, res: Response) => {
 
     if(user)
     {
-        const updateResult = await UserService.update(userId, model);
+        const updateResult = await UserService.updateUser(userId, model);
 
         if(updateResult)
         {
@@ -49,8 +49,27 @@ const updateUser = async (req: Request, res: Response) => {
     }
 }
 
+const deleteUser = async (req: Request, res: Response) => {
+    const userId = req.params.userId;
+    const user: IUser | null | undefined = await UserService.findById(userId);
+
+    if(user)
+    {
+        const deleteResult = await UserService.deleteUser(userId);
+
+        if(deleteResult)
+        {
+            res.status(200).json({deleteResult:deleteResult})
+        }
+    }
+    else {
+        return res.status(404).json({ message: "Could not delete : no user found for id " + userId })
+    }
+}
+
 export { 
     getUsers,
     getUserById,
-    updateUser
+    updateUser,
+    deleteUser
  };
