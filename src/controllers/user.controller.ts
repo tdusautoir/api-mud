@@ -41,7 +41,7 @@ const updateUser = async (req: Request, res: Response) => {
 
         if(updateResult)
         {
-            res.status(200).json({message:updateResult})
+            res.status(200).json({updateResult:updateResult})
         }
     }
     else {
