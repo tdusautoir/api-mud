@@ -22,12 +22,12 @@ const UserSchema: Schema = new Schema(
         },
         firstname: {
             type: String,
-            required: true,
+            // required: true,
             maxlength: 32
         },
         lastname: {
             type: String,
-            required: true,
+            // required: true,
             maxlength: 32
         },
         email: {

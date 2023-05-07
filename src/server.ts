@@ -5,8 +5,8 @@ import dotenv from 'dotenv';
 import cors from "cors";
 
 // import routes
-import authRoutes from './routes/auth';
-import userRoutes from './routes/user';
+import authRoutes from './routes/auth.route';
+import userRoutes from './routes/user.route';
 
 // import middlewares
 import { auth } from "./middleware/auth";
