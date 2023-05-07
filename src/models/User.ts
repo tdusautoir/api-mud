@@ -2,8 +2,8 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IUser {
     username: string;
-    firstname: string;
-    lastname: string;
+    firstname?: string;
+    lastname?: string;
     email: string;
     password: string;
     picture_id?: string;
@@ -22,12 +22,10 @@ const UserSchema: Schema = new Schema(
         },
         firstname: {
             type: String,
-            required: true,
             maxlength: 32
         },
         lastname: {
             type: String,
-            required: true,
             maxlength: 32
         },
         email: {
@@ -47,6 +45,6 @@ const UserSchema: Schema = new Schema(
     { timestamps: true }
 );
 
-export const UserModel = mongoose.model('User', UserSchema);
+export const UserModel = mongoose.model<IUserModel>('User', UserSchema);
 
 export default UserModel;

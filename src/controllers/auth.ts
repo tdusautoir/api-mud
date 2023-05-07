@@ -3,10 +3,6 @@ import User from '../models/User';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-// interface MulterRequest extends Request {
-//     file: any;
-// }
-
 const JWT_COOKIE_EXPIRES_IN: string = process.env.JWT_COOKIE_EXPIRES_IN || '1';
 
 const signin = async (req: Request, res: Response): Promise<any> => {
@@ -24,7 +20,7 @@ const signin = async (req: Request, res: Response): Promise<any> => {
         try {
             const token = jwt.sign(
                 {
-                    email: user.email,
+                    username: user.username,
                     id: user._id
                 },
                 process.env.JWT_SECRET || '',
@@ -32,7 +28,7 @@ const signin = async (req: Request, res: Response): Promise<any> => {
             );
             res.cookie('jwt', token, { httpOnly: true, secure: true, expires: new Date(Date.now() + parseInt(JWT_COOKIE_EXPIRES_IN) * 60 * 60 * 1000) });
 
-            res.status(200).json({ email: user.username, jwt: token });
+            res.status(200).json({ username: user.username, jwt: token });
         } catch (error) {
             res.status(500).json({ message: 'An error has occured during the token creation.' });
         }
@@ -45,6 +41,7 @@ const signup = async (req: Request, res: Response): Promise<any> => {
     try {
         const body = req.body;
         body.password = await bcrypt.hash(body.password, 10);
+        // cons
 
         const user = new User({
             ...body
