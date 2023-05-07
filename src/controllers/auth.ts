@@ -1,5 +1,4 @@
 import { Response, Request } from 'express';
-import mongoose from 'mongoose';
 import User from '../models/User';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -12,14 +11,16 @@ const JWT_COOKIE_EXPIRES_IN: string = process.env.JWT_COOKIE_EXPIRES_IN || '1';
 
 const signin = async (req: Request, res: Response): Promise<any> => {
     try {
-        const user = await User.findOne({ email: req.body.email });
+        const user = await User.findOne({ username: req.body.username });
         if (!user) {
             return res.status(401).json({ message: 'User not found' });
         }
+
         const passwordMatches = await bcrypt.compare(req.body.password, user.password);
         if (!passwordMatches) {
             return res.status(401).json({ message: 'Bad credentials' });
         }
+
         try {
             const token = jwt.sign(
                 {
@@ -31,7 +32,7 @@ const signin = async (req: Request, res: Response): Promise<any> => {
             );
             res.cookie('jwt', token, { httpOnly: true, secure: true, expires: new Date(Date.now() + parseInt(JWT_COOKIE_EXPIRES_IN) * 60 * 60 * 1000) });
 
-            res.status(200).json({ email: user.email, jwt: token });
+            res.status(200).json({ email: user.username, jwt: token });
         } catch (error) {
             res.status(500).json({ message: 'An error has occured during the token creation.' });
         }

@@ -1,7 +1,25 @@
-import mongoose, { Schema, InferSchemaType } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
+
+export interface IUser {
+    username: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+    password: string;
+    picture_id?: string;
+    favorite_characters?: Array<string>;
+}
+
+export interface IUserModel extends Document, IUser {}
 
 const UserSchema: Schema = new Schema(
     {
+        username: {
+            type: String,
+            required: true,
+            maxlength: 32,
+            unique: true
+        },
         firstname: {
             type: String,
             required: true,
@@ -23,14 +41,12 @@ const UserSchema: Schema = new Schema(
             type: String,
             required: true,
             minlength: 8,
-            match: /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).*$/
+            match: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[^\s]{8,}$/
         }
     },
     { timestamps: true }
 );
 
-type User = InferSchemaType<typeof UserSchema>;
-
-const UserModel = mongoose.model('User', UserSchema);
+export const UserModel = mongoose.model('User', UserSchema);
 
 export default UserModel;
