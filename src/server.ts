@@ -18,25 +18,26 @@ const app = express();
 
 /** CONNECT TO DATABASE */
 if (process.env.MONGO_URI) {
-    mongoose.connect(process.env.MONGO_URI)
-            .then(() => {
-                console.log('Connected to database')
-            })
-            .catch((error) => {
-                console.log(error);
-                process.exit(1);
-            })
+    mongoose
+        .connect(process.env.MONGO_URI)
+        .then(() => {
+            console.log('Connected to database');
+        })
+        .catch((error) => {
+            console.log(error);
+            process.exit(1);
+        });
 } else {
     console.error('MONGO_URI environment variable is not set.');
+    process.exit(1);
 }
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
-
 /** ROUTES */
-app.use('/auth', auth, authRoutes);
+app.use('/auth', authRoutes);
 app.use('/user', auth, userRoutes);
 
 /** HEALTHCHECK */
