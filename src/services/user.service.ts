@@ -1,8 +1,9 @@
-import User, { IUser } from "../models/User";
+import { Document } from "mongoose";
+import User, { IUser} from "../models/User";
 
 export const findAll = async (): Promise<IUser[]> => {
     return User.find();
-};
+}
 
 export const findById = async (id: String): Promise<IUser | null | undefined> => {
     return User.findById(id);
@@ -14,4 +15,8 @@ export const updateUser = async (id: String, model: IUser): Promise<IUser | null
 
 export const deleteUser = async (id: String): Promise<IUser | null> => {
     return User.findByIdAndDelete(id);
+}
+
+export const createUser = async (user: Document) => {
+    User.create(user)
 }

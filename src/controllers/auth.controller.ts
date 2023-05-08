@@ -2,6 +2,7 @@ import { Response, Request } from 'express';
 import User from '../models/User';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import * as UserService from '../services/user.service'
 
 // interface MulterRequest extends Request {
 //     file: any;
@@ -51,7 +52,7 @@ const signup = async (req: Request, res: Response): Promise<any> => {
             // profile_pic: (req as MulterRequest).file ? `${req.protocol}://${req.get('host')}/images/${(req as MulterRequest).file.filename}` : null
         });
 
-        await User.create(user);
+        await UserService.createUser(user);
         res.status(201).json({
             success: true,
             message: 'User created successfully.',
