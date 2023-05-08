@@ -1,10 +1,10 @@
-import User, { IUser } from '../models/User';
+import User, { IUserModel } from '../models/User';
 import { Request, Response } from 'express';
 import * as UserService from '../services/user.service'
 
 const getUsers = async (req: Request, res: Response) => {
     
-    const users: IUser[] = await UserService.findAll();
+    const users: IUserModel[] = await UserService.findAll();
 
     if(users.length > 0)
     {
@@ -18,7 +18,7 @@ const getUsers = async (req: Request, res: Response) => {
 
 const getUserById = async (req: Request, res: Response) => {
     const userId = req.params.userId;
-    const user: IUser | null | undefined = await UserService.findById(userId);
+    const user: IUserModel | null | undefined = await UserService.findById(userId);
 
     if(user)
     {
@@ -33,7 +33,7 @@ const updateUser = async (req: Request, res: Response) => {
     const model = req.body;
     const userId = req.params.userId;
 
-    const user: IUser | null | undefined = await UserService.findById(userId);
+    const user: IUserModel | null | undefined = await UserService.findById(userId);
 
     if(user)
     {
@@ -51,7 +51,7 @@ const updateUser = async (req: Request, res: Response) => {
 
 const deleteUser = async (req: Request, res: Response) => {
     const userId = req.params.userId;
-    const user: IUser | null | undefined = await UserService.findById(userId);
+    const user: IUserModel | null | undefined = await UserService.findById(userId);
 
     if(user)
     {

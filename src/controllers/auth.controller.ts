@@ -12,7 +12,7 @@ const JWT_COOKIE_EXPIRES_IN: string = process.env.JWT_COOKIE_EXPIRES_IN || '1';
 
 const signin = async (req: Request, res: Response): Promise<any> => {
     try {
-        const user = await User.findOne({ username: req.body.username });
+        const user = await UserService.findByEmail(req.body.email);
         if (!user) {
             return res.status(401).json({ message: 'User not found' });
         }
@@ -20,6 +20,11 @@ const signin = async (req: Request, res: Response): Promise<any> => {
         const passwordMatches = await bcrypt.compare(req.body.password, user.password);
         if (!passwordMatches) {
             return res.status(401).json({ message: 'Bad credentials' });
+        }
+
+        // Vérif de la validité de l'adresse mail
+        if(!user.active){
+            return res.status(403).json({ message: 'Email not verified'})
         }
 
         try {

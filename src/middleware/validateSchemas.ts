@@ -1,6 +1,6 @@
 import Joi, { ObjectSchema } from 'joi';
 import { NextFunction, Response, Request } from 'express';
-import { IUser } from '../models/User';
+import { IUserModel } from '../models/User';
 
 export const ValidateSchema = (schema: ObjectSchema) => {
     return async (req: Request, res: Response, next: NextFunction) => {
@@ -15,11 +15,11 @@ export const ValidateSchema = (schema: ObjectSchema) => {
 
 export const Schemas = {
     user: {
-        signin: Joi.object<IUser>({
+        signin: Joi.object<IUserModel>({
             username: Joi.string().required().max(32),
             password: Joi.string().required().pattern(new RegExp('^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).*$'))
         }),
-        signup: Joi.object<IUser>({
+        signup: Joi.object<IUserModel>({
             username: Joi.string().required().max(32),
             // firstname: Joi.string().required().max(32),
             // lastname: Joi.string().required().max(32),
