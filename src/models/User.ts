@@ -48,7 +48,7 @@ const UserSchema: Schema = new Schema(
         // Champ permettant de vérifier que l'adresse mail a été validée
         // Par défaut, l'utilisateur créé n'est pas actif tant qu'il n'a pas vérifié son adresse e-mail
         active: {
-            type: boolean,
+            type: Boolean,
             default: false,
             required: true
         }
