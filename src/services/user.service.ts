@@ -1,5 +1,6 @@
 import { Document } from "mongoose";
-import User, { IUserModel} from "../models/User";
+import User, { IUserModel } from "../models/User";
+import * as ConfirmationService from '../services/confirmation.service'
 
 export const findAll = async (): Promise<IUserModel[]> => {
     return User.find();
@@ -23,8 +24,7 @@ export const deleteUser = async (id: String): Promise<IUserModel | null> => {
 
 export const createUser = async (user: Document) => {
     User.create(user)
-}
 
-export const isUserActive = (user: IUserModel): boolean => {
-    return user.active;
+    // Send confirmation
+    await ConfirmationService.handleMailConfirmation(user._id);
 }
