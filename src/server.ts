@@ -10,6 +10,7 @@ import userRoutes from './routes/user';
 
 // import middlewares
 import { auth } from "./middleware/auth";
+import Logging from './library/Logging';
 
 dotenv.config();
 
@@ -21,14 +22,14 @@ if (process.env.MONGO_URI) {
     mongoose
         .connect(process.env.MONGO_URI)
         .then(() => {
-            console.log('Connected to database');
+            Logging.info('Connected to database');
         })
         .catch((error) => {
-            console.log(error);
+            Logging.error('Unable to connect to database :', error);
             process.exit(1);
         });
 } else {
-    console.error('MONGO_URI environment variable is not set.');
+    Logging.error('MONGO_URI environment variable is not set.');
     process.exit(1);
 }
 
@@ -42,9 +43,9 @@ app.use('/user', auth, userRoutes);
 
 /** HEALTHCHECK */
 app.get('/healthcheck', (req, res, next) => {
-    res.status(200).json({ message: "OK" });
-})
+    res.status(200).json({ message: 'OK' });
+});
 
 http.createServer(app).listen(port, () => {
-    console.log(`Server is running on port ${port}`)
-})
+    Logging.info(`Server is running on port ${port}`);
+});

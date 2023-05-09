@@ -2,6 +2,7 @@ import { Response, Request } from 'express';
 import User from '../models/User';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import Logging from '../library/Logging';
 
 // interface MulterRequest extends Request {
 //     file: any;
@@ -34,9 +35,11 @@ const signin = async (req: Request, res: Response): Promise<any> => {
 
             res.status(200).json({ email: user.username, jwt: token });
         } catch (error) {
+            Logging.error(error);
             res.status(500).json({ message: 'An error has occured during the token creation.' });
         }
     } catch (error: any) {
+        Logging.error(error);
         res.status(500).json({ message: error.message });
     }
 };
@@ -58,6 +61,7 @@ const signup = async (req: Request, res: Response): Promise<any> => {
             user
         });
     } catch (error: any) {
+        Logging.error(error);
         res.status(400).json({
             success: false,
             message: error.message

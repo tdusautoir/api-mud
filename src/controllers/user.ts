@@ -1,3 +1,4 @@
+import Logging from '../library/Logging';
 import User from '../models/User';
 import { Request, Response } from 'express';
 
@@ -9,6 +10,7 @@ const getUsers = async (req: Request, res: Response) => {
             users
         });
     } catch (error: any) {
+        Logging.error(error);
         res.status(400).json({
             success: false,
             message: error.message
