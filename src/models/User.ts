@@ -6,7 +6,7 @@ interface IUser {
     lastname: string;
     email: string;
     password: string;
-    active: boolean;
+    verified: boolean;
     picture_id?: string;
     favorite_characters?: Array<string>;
 }
@@ -46,7 +46,7 @@ const UserSchema: Schema = new Schema(
         },
         // Champ permettant de vérifier que l'adresse mail a été validée
         // Par défaut, l'utilisateur créé n'est pas actif tant qu'il n'a pas vérifié son adresse e-mail
-        active: {
+        verified: {
             type: Boolean,
             default: false,
             required: true
