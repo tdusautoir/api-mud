@@ -1,9 +1,10 @@
 import { Document } from "mongoose";
-import Confirmation from "../models/Confirmation";
-import bcrypt from 'bcrypt';
+import Confirmation, { IConfirmationModel } from "../models/Confirmation";
+import bcrypt, { compareSync } from 'bcrypt';
 import { transporter } from "../middleware/transporter";
 import * as UserService from '../services/user.service'
 import * as uuid from 'uuid'
+import { string } from "joi";
 
 export const handleMailConfirmation = async (currentUserId: string) => {
     const verifCode = uuid.v4();
@@ -16,7 +17,7 @@ export const handleMailConfirmation = async (currentUserId: string) => {
         from: process.env.GMAIL_MAIL,  // sender address
         to: user?.email,   // list of receivers
         subject: 'Email Verification',
-        text: 'http://localhost:3000/mail/' + hashedCode
+        text: 'Verify your e-mail at http://localhost:3000/mail/verify/' + hashedCode
     }
 
     transporter.sendMail(mailData, (error, info) => {
@@ -36,6 +37,45 @@ export const handleMailConfirmation = async (currentUserId: string) => {
     await createConfirmation(newConf);
 }
 
+// TODO : remplacer le type de retour par un ResultDTO
+export const verifyEmail = async (hash: string): Promise<boolean> => {
+    const conf = await getConfirmationByHash(hash);
+
+    if(conf){
+        const same = conf.codeHash === hash
+
+        if(same){
+            const user = await UserService.findById(conf.userId);
+
+            if(user){
+                user.verified = true;
+                await UserService.updateUser(user._id, user);
+                deleteConfirmation(conf._id);
+
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            return false;
+        }
+    }
+    else{
+        return false;
+    }
+}
+
+const getConfirmationByHash = async (hash: string): Promise<IConfirmationModel | null> => {
+    return Confirmation.findOne({codeHash:hash});
+}
+
+const deleteConfirmation = async (confId: string): Promise<IConfirmationModel | null> => {
+    return Confirmation.findByIdAndDelete(confId);
+}
+
 const createConfirmation = async (conf: Document) => {
     Confirmation.create(conf);
 }
+
