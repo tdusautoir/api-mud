@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/', getUsers);
 router.get('/:userId', getUserById)
-router.get('/:username', getUserByUsername)
+router.get('/name/:username', getUserByUsername)
 router.patch('/:userId', updateUser)
 router.delete('/:userId', deleteUser)
 
