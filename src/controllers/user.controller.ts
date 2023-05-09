@@ -29,6 +29,19 @@ const getUserById = async (req: Request, res: Response) => {
     }
 }
 
+const getUserByUsername = async (req: Request, res: Response) => {
+    const username = req.params.username;
+    const user: IUserModel | null = await UserService.findByUsername(username);
+
+    if(user)
+    {
+        return res.status(200).json(user);
+    }
+    else{
+        return res.status(404).json({ "message": "No user found for username " + username })
+    }
+}
+
 const updateUser = async (req: Request, res: Response) => {
     const model = req.body;
     const userId = req.params.userId;
@@ -70,6 +83,7 @@ const deleteUser = async (req: Request, res: Response) => {
 export { 
     getUsers,
     getUserById,
+    getUserByUsername,
     updateUser,
     deleteUser
  };
