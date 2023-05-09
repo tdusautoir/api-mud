@@ -1,10 +1,10 @@
 import { Document } from "mongoose";
 import Confirmation, { IConfirmationModel } from "../models/Confirmation";
-import bcrypt, { compareSync } from 'bcrypt';
+import bcrypt from 'bcrypt';
 import { transporter } from "../middleware/transporter";
 import * as UserService from '../services/user.service'
 import * as uuid from 'uuid'
-import { string } from "joi";
+import { VerifyEmailResult } from "../models/results/confirmationResults";
 
 export const handleMailConfirmation = async (currentUserId: string) => {
     const verifCode = uuid.v4();
@@ -38,7 +38,7 @@ export const handleMailConfirmation = async (currentUserId: string) => {
 }
 
 // TODO : remplacer le type de retour par un ResultDTO
-export const verifyEmail = async (hash: string): Promise<boolean> => {
+export const verifyEmail = async (hash: string): Promise<VerifyEmailResult> => {
     const conf = await getConfirmationByHash(hash);
 
     if(conf){
@@ -52,18 +52,18 @@ export const verifyEmail = async (hash: string): Promise<boolean> => {
                 await UserService.updateUser(user._id, user);
                 deleteConfirmation(conf._id);
 
-                return true;
+                return new VerifyEmailResult(true, undefined, undefined, user);
             }
             else{
-                return false;
+                return new VerifyEmailResult(false, `User linked to the confirmation hash could not be found (id: ${conf.userId}`, 404);
             }
         }
         else{
-            return false;
+            return new VerifyEmailResult(false, `Confirmation hash does not match link hash`, 400)
         }
     }
     else{
-        return false;
+        return new VerifyEmailResult(false, `Could not find confirmation entry with hash ${hash}`, 404);
     }
 }
 
