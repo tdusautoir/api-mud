@@ -17,7 +17,7 @@ export const handleMailConfirmation = async (currentUserId: string) => {
         from: process.env.GMAIL_MAIL,  // sender address
         to: user?.email,   // list of receivers
         subject: 'Email Verification',
-        text: 'Verify your e-mail at http://localhost:3000/mail/verify/' + hashedCode
+        text: `Verify your e-mail at ${process.env.CURRENT_URL}/login/` + hashedCode
     }
 
     transporter.sendMail(mailData, (error, info) => {
