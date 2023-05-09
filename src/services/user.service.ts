@@ -14,6 +14,10 @@ export const findByEmail = async (inEmail: String): Promise<IUserModel | null> =
     return User.findOne({email:inEmail});
 }
 
+export const findByUsername = async (inName: String): Promise<IUserModel | null> => {
+    return User.findOne({username:inName});
+}
+
 export const updateUser = async (id: String, model: IUserModel): Promise<IUserModel | null> => {
     return User.findOneAndUpdate({_id: id}, model, {new: true});
 }

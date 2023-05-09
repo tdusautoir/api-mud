@@ -12,7 +12,8 @@ const JWT_COOKIE_EXPIRES_IN: string = process.env.JWT_COOKIE_EXPIRES_IN || '1';
 
 const signin = async (req: Request, res: Response): Promise<any> => {
     try {
-        const user = await UserService.findByEmail(req.body.email);
+        // Attention à la gestion de la casse, espace etc
+        const user = await UserService.findByUsername(req.body.username);
         if (!user) {
             return res.status(401).json({ message: 'User not found' });
         }
