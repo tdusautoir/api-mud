@@ -23,7 +23,7 @@ const signin = async (req: Request, res: Response): Promise<any> => {
         }
 
         // Vérif de la validité de l'adresse mail
-        if(!user.active){
+        if(!user.verified){
             return res.status(403).json({ message: 'Email not verified'})
         }
 
