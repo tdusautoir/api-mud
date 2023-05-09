@@ -3,7 +3,7 @@ import Confirmation from "../models/Confirmation";
 import bcrypt from 'bcrypt';
 import { transporter } from "../middleware/transporter";
 import * as UserService from '../services/user.service'
-import uuid from 'uuid'
+import * as uuid from 'uuid'
 
 export const handleMailConfirmation = async (currentUserId: string) => {
     const verifCode = uuid.v4();
