@@ -32,7 +32,7 @@ const signin = async (req: Request, res: Response): Promise<any> => {
         try {
             const token = jwt.sign(
                 {
-                    email: user.email,
+                    username: user.username,
                     id: user._id
                 },
                 process.env.JWT_SECRET || '',
@@ -40,7 +40,7 @@ const signin = async (req: Request, res: Response): Promise<any> => {
             );
             res.cookie('jwt', token, { httpOnly: true, secure: true, expires: new Date(Date.now() + parseInt(JWT_COOKIE_EXPIRES_IN) * 60 * 60 * 1000) });
 
-            res.status(200).json({ email: user.username, jwt: token });
+            res.status(200).json({ username: user.username, jwt: token });
         } catch (error) {
             Logging.error(error);
             res.status(500).json({ message: 'An error has occured during the token creation.' });
