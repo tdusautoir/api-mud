@@ -5,12 +5,10 @@ const verifyEmail = async (req: Request, res: Response) => {
     
     const verifyResult = await ConfirmationService.verifyEmail(req.params.hash);
 
-    if(verifyResult.success)
-    {
-        return res.status(200).json({message:"Email verified"});
-    }
-    else{
-        return res.status(verifyResult.returnCode!).json({message: verifyResult.errorMessage!})
+    if (verifyResult.success) {
+        return res.status(200).json({ message: 'Email verified' });
+    } else {
+        return res.status(verifyResult.returnCode!).json({ message: verifyResult.errorMessage! });
     }   
 
 };
