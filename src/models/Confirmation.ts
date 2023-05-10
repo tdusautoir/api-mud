@@ -19,6 +19,6 @@ const ConfirmationSchema: Schema = new Schema({
     }
 });
 
-export const ConfirmationModel = mongoose.model('Confirmation', ConfirmationSchema);
+export const ConfirmationModel = mongoose.model<IConfirmationModel>('Confirmation', ConfirmationSchema);
 
 export default ConfirmationModel;
