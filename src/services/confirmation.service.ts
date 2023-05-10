@@ -41,30 +41,27 @@ export const handleMailConfirmation = async (currentUserId: string) => {
 export const verifyEmail = async (hash: string): Promise<VerifyEmailResult> => {
     const conf = await getConfirmationByHash(hash);
 
-    if(conf){
-        const same = conf.codeHash === hash
-
-        if(same){
-            const user = await UserService.findById(conf.userId);
-
-            if(user){
-                user.verified = true;
-                await UserService.updateUser(user._id, user);
-                deleteConfirmation(conf._id);
-
-                return new VerifyEmailResult(true, undefined, undefined, user);
-            }
-            else{
-                return new VerifyEmailResult(false, `User linked to the confirmation hash could not be found (id: ${conf.userId}`, 404);
-            }
-        }
-        else{
-            return new VerifyEmailResult(false, `Confirmation hash does not match link hash`, 400)
-        }
-    }
-    else{
+    if (!conf) {
         return new VerifyEmailResult(false, `Could not find confirmation entry with hash ${hash}`, 404);
     }
+
+    const same = conf.codeHash === hash;
+
+    if (!same) {
+        return new VerifyEmailResult(false, `Confirmation hash does not match link hash`, 400);
+    }
+
+    const user = await UserService.findById(conf.userId);
+
+    if (!user) {
+        return new VerifyEmailResult(false, `User linked to the confirmation hash could not be found (id: ${conf.userId}`, 404);
+    }
+
+    user.verified = true;
+    await UserService.updateUser(user._id, user);
+    deleteConfirmation(conf._id);
+
+    return new VerifyEmailResult(true, undefined, undefined, user);
 }
 
 const getConfirmationByHash = async (hash: string): Promise<IConfirmationModel | null> => {
