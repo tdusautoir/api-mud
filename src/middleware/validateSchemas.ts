@@ -23,8 +23,8 @@ export const Schemas = {
         }),
         signup: Joi.object<IUser>({
             username: Joi.string().required().max(32),
-            firstname: Joi.string().required().max(32),
-            lastname: Joi.string().required().max(32),
+            // firstname: Joi.string().required().max(32),
+            // lastname: Joi.string().required().max(32),
             email: Joi.string().required().max(32).lowercase().trim(),
             password: Joi.string().required().pattern(new RegExp('^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).*$'))
         })

@@ -6,6 +6,7 @@ export interface IUser {
     lastname: string;
     email: string;
     password: string;
+    verified: boolean;
     picture_id?: string;
     favorite_characters?: Array<string>;
 }
@@ -22,12 +23,12 @@ const UserSchema: Schema = new Schema(
         },
         firstname: {
             type: String,
-            required: true,
+            // required: true,
             maxlength: 32
         },
         lastname: {
             type: String,
-            required: true,
+            // required: true,
             maxlength: 32
         },
         email: {
@@ -42,6 +43,13 @@ const UserSchema: Schema = new Schema(
             required: true,
             minlength: 8,
             match: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[^\s]{8,}$/
+        },
+        // Champ permettant de vérifier que l'adresse mail a été validée
+        // Par défaut, l'utilisateur créé n'est pas actif tant qu'il n'a pas vérifié son adresse e-mail
+        verified: {
+            type: Boolean,
+            default: false,
+            required: true
         }
     },
     { timestamps: true }
