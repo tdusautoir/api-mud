@@ -7,6 +7,7 @@ import cors from "cors";
 // import routes
 import authRoutes from './routes/auth.route';
 import userRoutes from './routes/user.route';
+import confirmationRoutes from './routes/confirmation.route'
 
 // import middlewares
 import { auth } from "./middleware/auth";
@@ -39,6 +40,7 @@ app.use(cors());
 /** ROUTES */
 app.use('/auth', authRoutes);
 app.use('/user', auth, userRoutes);
+app.use('/mail', confirmationRoutes)
 
 /** HEALTHCHECK */
 app.get('/healthcheck', (req, res, next) => {
