@@ -11,6 +11,9 @@ import confirmationRoutes from './routes/confirmation.route'
 
 // import middlewares
 import { auth } from "./middleware/auth";
+import { requestLogger } from './middleware/requestLogger';
+
+// import libraries
 import Logging from './library/Logging';
 
 dotenv.config();
@@ -37,6 +40,7 @@ if (process.env.MONGO_URI) {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
+app.use(requestLogger);
 
 /** ROUTES */
 app.use('/auth', authRoutes);

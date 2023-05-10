@@ -25,7 +25,9 @@ export const handleMailConfirmation = async (currentUserId: string) => {
             Logging.error(error);
         }
 
-        Logging.info(info);
+        if (info) {
+            Logging.info(info);
+        }
     });
 
     // Enregistrer le code de vérif en base
