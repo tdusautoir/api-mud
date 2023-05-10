@@ -27,6 +27,13 @@ export const Schemas = {
             lastname: Joi.string().max(32), //.required()
             email: Joi.string().required().max(32).lowercase().trim(),
             password: Joi.string().required().pattern(new RegExp('^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).*$'))
+        }),
+        update: Joi.object<IUser>({
+            username: Joi.string().required().max(32),
+            firstname: Joi.string().max(32), //.required()
+            lastname: Joi.string().max(32), //.required()
+            email: Joi.string().required().max(32).lowercase().trim(),
+            password: Joi.string().required().pattern(new RegExp('^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).*$'))
         })
     }
 };

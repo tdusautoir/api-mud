@@ -1,6 +1,6 @@
-import User, { IUserModel } from '../models/User';
+import User, { IUser, IUserModel } from '../models/User';
 import { Request, Response } from 'express';
-import * as UserService from '../services/user.service'
+import * as UserService from '../services/user.service';
 
 const getUsers = async (req: Request, res: Response) => {
     const users: IUserModel[] = await UserService.findAll();
@@ -35,7 +35,7 @@ const getUserByUsername = async (req: Request, res: Response) => {
 };
 
 const updateUser = async (req: Request, res: Response) => {
-    const model = req.body;
+    const model: IUser = req.body;
     const userId = req.params.userId;
 
     const user: IUserModel | null | undefined = await UserService.findById(userId);
@@ -66,10 +66,4 @@ const deleteUser = async (req: Request, res: Response) => {
     }
 };
 
-export { 
-    getUsers,
-    getUserById,
-    getUserByUsername,
-    updateUser,
-    deleteUser
- };
+export { getUsers, getUserById, getUserByUsername, updateUser, deleteUser };

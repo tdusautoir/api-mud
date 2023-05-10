@@ -1,4 +1,4 @@
-import User, { IUserModel } from '../models/User';
+import User, { IUserModel, IUser } from '../models/User';
 import * as ConfirmationService from '../services/confirmation.service';
 
 export const findAll = async (): Promise<IUserModel[]> => {
@@ -17,7 +17,7 @@ export const findByUsername = async (inName: String): Promise<IUserModel | null>
     return User.findOne({ username: inName });
 };
 
-export const updateUser = async (id: String, model: IUserModel): Promise<IUserModel | null> => {
+export const updateUser = async (id: String, model: IUser): Promise<IUserModel | null> => {
     return User.findOneAndUpdate({ _id: id }, model, { new: true });
 };
 

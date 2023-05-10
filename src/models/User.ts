@@ -6,7 +6,7 @@ export interface IUser {
     lastname: string;
     email: string;
     password: string;
-    verified: boolean;
+    verified?: boolean;
     picture_id?: string;
     favorite_characters?: Array<string>;
 }
@@ -48,8 +48,7 @@ const UserSchema: Schema = new Schema(
         // Par défaut, l'utilisateur créé n'est pas actif tant qu'il n'a pas vérifié son adresse e-mail
         verified: {
             type: Boolean,
-            default: false,
-            required: true
+            default: false
         }
     },
     { timestamps: true }
