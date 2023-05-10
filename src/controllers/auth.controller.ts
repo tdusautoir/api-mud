@@ -2,6 +2,7 @@ import { Response, Request } from 'express';
 import User from '../models/User';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import Logging from '../library/Logging';
 import * as UserService from '../services/user.service'
 
 // interface MulterRequest extends Request {
@@ -24,8 +25,8 @@ const signin = async (req: Request, res: Response): Promise<any> => {
         }
 
         // Vérif de la validité de l'adresse mail
-        if(!user.verified){
-            return res.status(403).json({ message: 'Email not verified'})
+        if (!user.verified) {
+            return res.status(403).json({ message: 'Email not verified' });
         }
 
         try {
@@ -41,9 +42,11 @@ const signin = async (req: Request, res: Response): Promise<any> => {
 
             res.status(200).json({ username: user.username, jwt: token });
         } catch (error) {
+            Logging.error(error);
             res.status(500).json({ message: 'An error has occured during the token creation.' });
         }
     } catch (error: any) {
+        Logging.error(error);
         res.status(500).json({ message: error.message });
     }
 };
@@ -65,6 +68,7 @@ const signup = async (req: Request, res: Response): Promise<any> => {
             user
         });
     } catch (error: any) {
+        Logging.error(error);
         res.status(400).json({
             success: false,
             message: error.message

@@ -1,10 +1,10 @@
-import { Document } from "mongoose";
-import Confirmation, { IConfirmationModel } from "../models/Confirmation";
+import Confirmation, { IConfirmationModel } from '../models/Confirmation';
 import bcrypt from 'bcrypt';
-import { transporter } from "../middleware/transporter";
-import * as UserService from '../services/user.service'
-import * as uuid from 'uuid'
-import { VerifyEmailResult } from "../models/results/confirmationResults";
+import { transporter } from '../library/transporter';
+import * as UserService from '../services/user.service';
+import * as uuid from 'uuid';
+import { VerifyEmailResult } from '../models/results/confirmationResults';
+import Logging from '../library/Logging';
 
 export const handleMailConfirmation = async (currentUserId: string) => {
     const verifCode = uuid.v4();
@@ -14,28 +14,30 @@ export const handleMailConfirmation = async (currentUserId: string) => {
     const user = await UserService.findById(currentUserId);
 
     const mailData = {
-        from: process.env.GMAIL_MAIL,  // sender address
-        to: user?.email,   // list of receivers
+        from: process.env.GMAIL_MAIL, // sender address
+        to: user?.email, // list of receivers
         subject: 'Email Verification',
         text: `Verify your e-mail at ${process.env.CURRENT_URL}/login/` + hashedCode
-    }
+    };
 
     transporter.sendMail(mailData, (error, info) => {
-        if(error){
-            console.log(error);
+        if (error) {
+            Logging.error(error);
         }
 
-        console.log(info);
+        if (info) {
+            Logging.info(info);
+        }
     });
 
     // Enregistrer le code de vérif en base
     const newConf = new Confirmation({
         userId: currentUserId,
         codeHash: hashedCode
-    })
+    });
 
     await createConfirmation(newConf);
-}
+};
 
 // TODO : remplacer le type de retour par un ResultDTO
 export const verifyEmail = async (hash: string): Promise<VerifyEmailResult> => {
@@ -65,14 +67,13 @@ export const verifyEmail = async (hash: string): Promise<VerifyEmailResult> => {
 }
 
 const getConfirmationByHash = async (hash: string): Promise<IConfirmationModel | null> => {
-    return Confirmation.findOne({codeHash:hash});
-}
+    return Confirmation.findOne({ codeHash: hash });
+};
 
 const deleteConfirmation = async (confId: string): Promise<IConfirmationModel | null> => {
     return Confirmation.findByIdAndDelete(confId);
-}
+};
 
-const createConfirmation = async (conf: Document) => {
+const createConfirmation = async (conf: IConfirmationModel) => {
     Confirmation.create(conf);
-}
-
+};

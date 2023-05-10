@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-interface IConfirmation {
+export interface IConfirmation {
     userId: string;
     codeHash: string;
 }

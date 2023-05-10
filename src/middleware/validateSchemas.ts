@@ -1,6 +1,7 @@
 import Joi, { ObjectSchema } from 'joi';
 import { NextFunction, Response, Request } from 'express';
 import { IUser } from '../models/User';
+import Logging from '../library/Logging';
 
 export const ValidateSchema = (schema: ObjectSchema) => {
     return async (req: Request, res: Response, next: NextFunction) => {
@@ -8,6 +9,7 @@ export const ValidateSchema = (schema: ObjectSchema) => {
             await schema.validateAsync(req.body);
             next();
         } catch (error) {
+            Logging.error(error);
             return res.status(422).json({ error });
         }
     };
