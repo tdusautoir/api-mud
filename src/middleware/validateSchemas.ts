@@ -15,7 +15,7 @@ export const ValidateSchema = (schema: ObjectSchema) => {
 
 export const Schemas = {
     user: {
-        signin: Joi.object<IUserModel>({
+        signin: Joi.object<IUser>({
             username: Joi.string().required().max(32),
             password: Joi.string().required().pattern(new RegExp('^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).*$'))
         }),
