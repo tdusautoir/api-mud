@@ -59,7 +59,15 @@ export const createUser = async (user: IUserModel): Promise<CreateUserResult> =>
     const existingUser = await findByUsername(user.username);
 
     if (existingUser) {
-        return new CreateUserResult(false, `Username already exists`, MudStatusCode.BAD_REQUEST);
+
+        const sameEmailMatch = await findByEmail(user.email);
+
+        if(sameEmailMatch) {
+            return new CreateUserResult(false, `Email already used`, MudStatusCode.BAD_REQUEST);
+        }
+        else {
+            return new CreateUserResult(false, `Username already exists`, MudStatusCode.BAD_REQUEST);
+        }
     }
 
     await User.create(user);
