@@ -2,9 +2,10 @@ import Confirmation, { IConfirmationModel } from '../models/Confirmation';
 import { transporter } from '../library/transporter';
 import * as UserService from '../services/user.service';
 import * as uuid from 'uuid';
-import { CreateConfirmationResult, VerifyEmailResult } from '../models/results/confirmationResults';
+import { CreateConfirmationResult, DeleteConfirmationResult, VerifyEmailResult } from '../models/results/confirmationResults';
 import Logging from '../library/Logging';
 import { MudStatusCode } from '../constants/statusCodes';
+import User from '../models/User';
 
 export const createUserAndConfirmation = async (currentUserId: string): Promise<CreateConfirmationResult> => {
     const verifCode = uuid.v4();
@@ -48,38 +49,68 @@ export const verifyEmail = async (code: string): Promise<VerifyEmailResult> => {
     const conf = await getConfirmationByCode(code);
 
     if (!conf) {
-        return new VerifyEmailResult(false, `Could not find confirmation entry with hash ${code}`, 404);
+        return new VerifyEmailResult(false, `Could not find confirmation entry with hash ${code}`, MudStatusCode.NOT_FOUND);
     }
 
     const same = conf.code === code;
 
     if (!same) {
-        return new VerifyEmailResult(false, `Confirmation hash does not match link hash`, 400);
+        return new VerifyEmailResult(false, `Confirmation hash does not match link hash`, MudStatusCode.BAD_REQUEST);
     }
 
     const user = await UserService.findById(conf.userId);
 
     if (!user) {
-        return new VerifyEmailResult(false, `User linked to the confirmation hash could not be found (id: ${conf.userId}`, 404);
+        return new VerifyEmailResult(false, `User linked to the confirmation hash could not be found (id: ${conf.userId}`, MudStatusCode.NOT_FOUND);
     }
 
-    user.verified = true;
-    await UserService.updateUser(user._id, user);
-    deleteConfirmation(conf._id);
+    const newUser = user;
+    newUser.verified = true;
+
+    const updatedResult = await UserService.updateUser(conf.userId, newUser);
+
+    if(!updatedResult.success) {
+        return new VerifyEmailResult(false, updatedResult.errorMessage, updatedResult.returnCode)
+    }
+
+    const deleteConfResult = await deleteConfirmation(conf._id);
+
+    if(!deleteConfResult.success) {
+        return new VerifyEmailResult(false, deleteConfResult.errorMessage, deleteConfResult.returnCode)
+    }
 
     return new VerifyEmailResult(true, undefined, MudStatusCode.OK, user);
 };
 
 const getConfirmationByCode = async (code: string): Promise<IConfirmationModel | null> => {
-    return Confirmation.findOne({ code: code });
+    return await Confirmation.findOne({ code: code });
 };
 
-const deleteConfirmation = async (confId: string): Promise<IConfirmationModel | null> => {
-    return Confirmation.findByIdAndDelete(confId);
+const getConfirmationById = async (id: string): Promise<IConfirmationModel | null> => {
+    return await Confirmation.findById(id);
+}
+
+const deleteConfirmation = async (confId: string): Promise<DeleteConfirmationResult> => {
+
+    const conf = await getConfirmationById(confId);
+
+    if (!conf) {
+        return new DeleteConfirmationResult(false, `Could not find confirmation with id ${confId}`, MudStatusCode.NOT_FOUND);
+    }
+
+    await Confirmation.findByIdAndDelete(confId);
+
+    const deletedConf = await getConfirmationById(confId);
+
+    if (deletedConf) {
+        return new DeleteConfirmationResult(false, `Confirmation ${confId} still exists`, MudStatusCode.BAD_REQUEST);
+    }
+
+    return new DeleteConfirmationResult(true, undefined, MudStatusCode.OK);
 };
 
 const createConfirmation = async (conf: IConfirmationModel): Promise<CreateConfirmationResult> => {
-    Confirmation.create(conf);
+    await Confirmation.create(conf);
 
     const createdConf = await getConfirmationByCode(conf.code);
 

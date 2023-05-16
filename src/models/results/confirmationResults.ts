@@ -27,3 +27,17 @@ export class CreateConfirmationResult{
         this.resultObject = resultObject;
     };
 }
+
+export class DeleteConfirmationResult{
+    success: boolean;
+    errorMessage?: string;    
+    returnCode?: MudStatusCode;
+    resultObject?: object;
+
+    constructor(success: boolean, errorMessage?: string, returnCode?: MudStatusCode, resultObject?: object) {
+        this.success = success;
+        this.errorMessage = errorMessage;
+        this.returnCode = returnCode;
+        this.resultObject = resultObject;
+    };
+}

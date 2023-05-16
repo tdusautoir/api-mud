@@ -4,29 +4,29 @@ import * as ConfirmationService from '../services/confirmation.service';
 import { MudStatusCode } from '../constants/statusCodes';
 
 export const findAll = async (): Promise<IUserModel[]> => {
-    return User.find();
+    return await User.find();
 };
 
 export const findById = async (id: string): Promise<IUserModel | null | undefined> => {
-    return User.findById(id);
+    return await User.findById(id);
 };
 
 export const findByEmail = async (inEmail: string): Promise<IUserModel | null> => {
-    return User.findOne({ email: { $regex: new RegExp(inEmail, 'i') } });
+    return await User.findOne({ email: { $regex: new RegExp(inEmail, 'i') } });
 };
 
 export const findByUsername = async (inName: string): Promise<IUserModel | null> => {
-    return User.findOne({ username: { $regex: new RegExp(inName, 'i') } });
+    return await User.findOne({ username: { $regex: new RegExp(inName, 'i') } });
 };
 
 export const updateUser = async (id: string, model: IUserModel): Promise<UpdateUserResult> => {
-    const user = findById(id);
+    const user = await findById(id);
 
     if (!user) {
-        return new UpdateUserResult(false, `Could not find user with id ${id}`, MudStatusCode.NOT_FOUND);
+        return new UpdateUserResult(false, `Could not find user to update with id ${id}`, MudStatusCode.NOT_FOUND);
     }
 
-    User.findOneAndUpdate({ _id: id }, model, { new: true });
+    const result = await User.findOneAndUpdate({ _id: id }, model, { new: true });
 
     const updatedUser = await findById(id);
 
@@ -38,13 +38,13 @@ export const updateUser = async (id: string, model: IUserModel): Promise<UpdateU
 };
 
 export const deleteUser = async (id: string): Promise<DeleteUserResult> => {
-    const user = findById(id);
+    const user = await findById(id);
 
     if (!user) {
         return new DeleteUserResult(false, `Could not find user with id ${id}`, MudStatusCode.NOT_FOUND);
     }
 
-    User.findByIdAndDelete(id);
+    await User.findByIdAndDelete(id);
 
     const deletedUser = await findById(id);
 
@@ -62,11 +62,11 @@ export const createUser = async (user: IUserModel): Promise<CreateUserResult> =>
         return new CreateUserResult(false, `Username already exists`, MudStatusCode.BAD_REQUEST);
     }
 
-    User.create(user);
-    const createdUser = findByUsername(user.username);
+    await User.create(user);
+    const createdUser = await findByUsername(user.username);
 
     if (!createdUser) {
-        return new CreateUserResult(false, `Error creating user`, MudStatusCode.BAD_REQUEST, user);
+        return new CreateUserResult(false, `Error creating user: ${user.username} cannot be found`, MudStatusCode.BAD_REQUEST, user);
     }
 
     // Send confirmation
