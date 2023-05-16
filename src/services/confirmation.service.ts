@@ -1,11 +1,9 @@
 import Confirmation, { IConfirmationModel } from '../models/Confirmation';
-import bcrypt from 'bcrypt';
 import { transporter } from '../library/transporter';
 import * as UserService from '../services/user.service';
 import * as uuid from 'uuid';
 import { CreateConfirmationResult, VerifyEmailResult } from '../models/results/confirmationResults';
 import Logging from '../library/Logging';
-import { CreateUserResult } from '../models/results/userResults';
 import { MudStatusCode } from '../constants/statusCodes';
 
 export const createUserAndConfirmation = async (currentUserId: string): Promise<CreateConfirmationResult> => {
@@ -14,15 +12,15 @@ export const createUserAndConfirmation = async (currentUserId: string): Promise<
     // Envoyer le code par mail
     const user = await UserService.findById(currentUserId);
 
-    if(!user) {
-        return new CreateConfirmationResult(false, `Could not find user with id ${currentUserId}`, MudStatusCode.NOT_FOUND)
+    if (!user) {
+        return new CreateConfirmationResult(false, `Could not find user with id ${currentUserId}`, MudStatusCode.NOT_FOUND);
     }
 
     const mailData = {
         from: process.env.GMAIL_MAIL, // sender address
         to: user?.email, // list of receivers
         subject: 'Email Verification',
-        text: `Verify your e-mail at ${process.env.CURRENT_URL}/login/` + verifCode
+        text: `Verify your e-mail at ${process.env.CURRENT_URL}/sign-in/` + verifCode
     };
 
     transporter.sendMail(mailData, (error, info) => {
@@ -70,7 +68,7 @@ export const verifyEmail = async (code: string): Promise<VerifyEmailResult> => {
     deleteConfirmation(conf._id);
 
     return new VerifyEmailResult(true, undefined, MudStatusCode.OK, user);
-}
+};
 
 const getConfirmationByCode = async (code: string): Promise<IConfirmationModel | null> => {
     return Confirmation.findOne({ code: code });
@@ -85,10 +83,9 @@ const createConfirmation = async (conf: IConfirmationModel): Promise<CreateConfi
 
     const createdConf = await getConfirmationByCode(conf.code);
 
-    if(createdConf) {
+    if (createdConf) {
         return new CreateConfirmationResult(true, undefined, MudStatusCode.CREATED, createdConf);
-    }
-    else {
-        return new CreateConfirmationResult(false, `Error creating mail confirmation for user ${conf.userId}`, MudStatusCode.BAD_REQUEST, conf)
+    } else {
+        return new CreateConfirmationResult(false, `Error creating mail confirmation for user ${conf.userId}`, MudStatusCode.BAD_REQUEST, conf);
     }
 };

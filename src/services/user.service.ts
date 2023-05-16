@@ -12,17 +12,17 @@ export const findById = async (id: string): Promise<IUserModel | null | undefine
 };
 
 export const findByEmail = async (inEmail: string): Promise<IUserModel | null> => {
-    return User.findOne({ email: { $regex : new RegExp(inEmail, "i") } });
+    return User.findOne({ email: { $regex: new RegExp(inEmail, 'i') } });
 };
 
 export const findByUsername = async (inName: string): Promise<IUserModel | null> => {
-    return User.findOne({ username: { $regex : new RegExp(inName, "i") } });
+    return User.findOne({ username: { $regex: new RegExp(inName, 'i') } });
 };
 
 export const updateUser = async (id: string, model: IUserModel): Promise<UpdateUserResult> => {
     const user = findById(id);
 
-    if(!user) {
+    if (!user) {
         return new UpdateUserResult(false, `Could not find user with id ${id}`, MudStatusCode.NOT_FOUND);
     }
 
@@ -30,7 +30,7 @@ export const updateUser = async (id: string, model: IUserModel): Promise<UpdateU
 
     const updatedUser = await findById(id);
 
-    if(!updatedUser) {
+    if (!updatedUser) {
         return new UpdateUserResult(false, `Coud not find updated user (id: ${id})`, MudStatusCode.NOT_FOUND);
     }
 
@@ -40,7 +40,7 @@ export const updateUser = async (id: string, model: IUserModel): Promise<UpdateU
 export const deleteUser = async (id: string): Promise<DeleteUserResult> => {
     const user = findById(id);
 
-    if(!user) {
+    if (!user) {
         return new DeleteUserResult(false, `Could not find user with id ${id}`, MudStatusCode.NOT_FOUND);
     }
 
@@ -48,7 +48,7 @@ export const deleteUser = async (id: string): Promise<DeleteUserResult> => {
 
     const deletedUser = await findById(id);
 
-    if(deletedUser) {
+    if (deletedUser) {
         return new DeleteUserResult(false, `User ${id} still exists`, MudStatusCode.BAD_REQUEST);
     }
 
@@ -58,24 +58,23 @@ export const deleteUser = async (id: string): Promise<DeleteUserResult> => {
 export const createUser = async (user: IUserModel): Promise<CreateUserResult> => {
     const existingUser = await findByUsername(user.username);
 
-    if(existingUser) {
-        return new CreateUserResult(false, `User ${user.username} already exists`, MudStatusCode.BAD_REQUEST);
+    if (existingUser) {
+        return new CreateUserResult(false, `Username already exists`, MudStatusCode.BAD_REQUEST);
     }
 
     User.create(user);
     const createdUser = findByUsername(user.username);
 
-    if(!createdUser) {
+    if (!createdUser) {
         return new CreateUserResult(false, `Error creating user`, MudStatusCode.BAD_REQUEST, user);
     }
 
     // Send confirmation
     const createConfResult = await ConfirmationService.createUserAndConfirmation(user._id);
 
-    if(!createConfResult.success) {
+    if (!createConfResult.success) {
         return new CreateUserResult(false, createConfResult.errorMessage, createConfResult.returnCode, createConfResult.resultObject);
     }
 
-    return new CreateUserResult(true, undefined, MudStatusCode.CREATED, createdUser);  
-
+    return new CreateUserResult(true, undefined, MudStatusCode.CREATED, createdUser);
 };
