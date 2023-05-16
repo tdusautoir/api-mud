@@ -2,7 +2,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IConfirmation {
     userId: string;
-    codeHash: string;
+    code: string;
 }
 
 export interface IConfirmationModel extends Document, IConfirmation {}
@@ -13,7 +13,7 @@ const ConfirmationSchema: Schema = new Schema({
         ref: "User",
         required: true
     },
-    codeHash: {
+    code: {
         type: String,
         required: true
     }
