@@ -25,7 +25,8 @@ const UserStatsSchema: Schema = new Schema({
     userId: {
         type: String,
         ref: "User",
-        required: true
+        required: true,
+        unique: true
     },
     playerRank: {
         type: String,
@@ -85,4 +86,4 @@ const UserStatsSchema: Schema = new Schema({
 
 export const UserStatsModel = mongoose.model<IUserStatsModel>('UserStats', UserStatsSchema);
 
-export default UserStatsSchema;
+export default UserStatsModel;

@@ -1,0 +1,15 @@
+import { MudStatusCode } from "../../helpers/constants";
+
+export class CreateParamResult{
+    success: boolean;
+    errorMessage?: string;    
+    returnCode?: MudStatusCode;
+    resultObject?: object;
+
+    constructor(success: boolean, errorMessage?: string, returnCode?: MudStatusCode, resultObject?: object) {
+        this.success = success;
+        this.errorMessage = errorMessage;
+        this.returnCode = returnCode;
+        this.resultObject = resultObject;
+    };
+}

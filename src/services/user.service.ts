@@ -1,7 +1,8 @@
 import User, { IUserModel } from '../models/User';
-import { CreateUserResult, DeleteUserResult, UpdateUserResult } from '../models/results/userResults';
+import { CreateUserResult, DeleteUserResult, UpdateUserResult } from '../models/results/user.results';
 import * as ConfirmationService from '../services/confirmation.service';
-import { MudStatusCode } from '../constants/statusCodes';
+import { MudStatusCode } from '../helpers/constants';
+import * as UserStatsService from "../services/userStats.service"
 
 export const findAll = async (): Promise<IUserModel[]> => {
     return await User.find();
@@ -70,11 +71,19 @@ export const createUser = async (user: IUserModel): Promise<CreateUserResult> =>
         return new CreateUserResult(false, `Email already used`, MudStatusCode.BAD_REQUEST);
     }
 
+    // Création
     await User.create(user);
     const createdUser = await findByUsername(user.username);
 
     if (!createdUser) {
         return new CreateUserResult(false, `Error creating user: ${user.username} cannot be found`, MudStatusCode.BAD_REQUEST, user);
+    }
+
+    // Création des stats
+    const createStatResult = await UserStatsService.createUserStats(createdUser._id);
+
+    if (!createStatResult.success) {
+        return new CreateUserResult(false, createStatResult.errorMessage, createStatResult.returnCode, createStatResult.resultObject);
     }
 
     // Send confirmation

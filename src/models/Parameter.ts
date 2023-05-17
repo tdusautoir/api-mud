@@ -11,7 +11,7 @@ export interface IParameterModel extends Document, IParameter {}
 const ParameterSchema: Schema = new Schema({
     cle: {
         type: String,
-        required: true
+        required: true        
     },
     valeur: {
         type: String,

@@ -2,10 +2,10 @@ import Confirmation, { IConfirmationModel } from '../models/Confirmation';
 import { transporter } from '../library/transporter';
 import * as UserService from '../services/user.service';
 import * as uuid from 'uuid';
-import { CreateConfirmationResult, DeleteConfirmationResult, VerifyEmailResult } from '../models/results/confirmationResults';
 import Logging from '../library/Logging';
-import { MudStatusCode } from '../constants/statusCodes';
+import { MudStatusCode } from '../helpers/constants';
 import User from '../models/User';
+import { CreateConfirmationResult, DeleteConfirmationResult, VerifyEmailResult } from '../models/results/confirmation.results';
 
 export const createUserAndConfirmation = async (currentUserId: string): Promise<CreateConfirmationResult> => {
     const verifCode = uuid.v4();

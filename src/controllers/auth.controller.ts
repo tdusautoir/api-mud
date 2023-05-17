@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Logging from '../library/Logging';
 import * as UserService from '../services/user.service'
-import { MudStatusCode } from '../constants/statusCodes';
+import { MudStatusCode } from '../helpers/constants';
 
 // interface MulterRequest extends Request {
 //     file: any;

@@ -8,6 +8,7 @@ import cors from "cors";
 import authRoutes from './routes/auth.route';
 import userRoutes from './routes/user.route';
 import confirmationRoutes from './routes/confirmation.route'
+import parameterRoutes from './routes/parameter.route'
 
 // import middlewares
 import { auth } from "./middleware/auth";
@@ -32,7 +33,8 @@ if (process.env.MONGO_URI) {
             Logging.error('Unable to connect to database :', error);
             process.exit(1);
         });
-} else {
+} 
+else {
     Logging.error('MONGO_URI environment variable is not set.');
     process.exit(1);
 }
@@ -45,7 +47,8 @@ app.use(requestLogger);
 /** ROUTES */
 app.use('/auth', authRoutes);
 app.use('/user', auth, userRoutes);
-app.use('/mail', confirmationRoutes)
+app.use('/mail', confirmationRoutes);
+app.use('/param', parameterRoutes);
 
 /** HEALTHCHECK */
 app.get('/healthcheck', (req, res, next) => {

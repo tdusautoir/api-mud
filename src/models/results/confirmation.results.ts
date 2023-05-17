@@ -1,20 +1,6 @@
-import { MudStatusCode } from "../../constants/statusCodes";
+import { MudStatusCode } from "../../helpers/constants";
 
-export class CreateUserResult {
-    success: boolean;
-    errorMessage?: string;    
-    returnCode?: MudStatusCode;
-    resultObject?: object;
-
-    constructor(success: boolean, errorMessage?: string, returnCode?: MudStatusCode, resultObject?: object) {
-        this.success = success;
-        this.errorMessage = errorMessage;
-        this.returnCode = returnCode;
-        this.resultObject = resultObject;
-    };    
-}
-
-export class UpdateUserResult {
+export class VerifyEmailResult{
     success: boolean;
     errorMessage?: string;    
     returnCode?: MudStatusCode;
@@ -28,7 +14,21 @@ export class UpdateUserResult {
     };
 }
 
-export class DeleteUserResult {
+export class CreateConfirmationResult{
+    success: boolean;
+    errorMessage?: string;    
+    returnCode?: MudStatusCode;
+    resultObject?: object;
+
+    constructor(success: boolean, errorMessage?: string, returnCode?: MudStatusCode, resultObject?: object) {
+        this.success = success;
+        this.errorMessage = errorMessage;
+        this.returnCode = returnCode;
+        this.resultObject = resultObject;
+    };
+}
+
+export class DeleteConfirmationResult{
     success: boolean;
     errorMessage?: string;    
     returnCode?: MudStatusCode;

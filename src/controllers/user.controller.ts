@@ -1,7 +1,7 @@
 import User, { IUserModel } from '../models/User';
 import { Request, Response } from 'express';
 import * as UserService from '../services/user.service'
-import { MudStatusCode } from '../constants/statusCodes';
+import { MudStatusCode } from '../helpers/constants';
 
 const getUsers = async (req: Request, res: Response) => {
     const users: IUserModel[] = await UserService.findAll();
@@ -48,7 +48,7 @@ const updateUser = async (req: Request, res: Response) => {
         success: updateResult.success,
         message: updateResult.errorMessage,
         object: updateResult.resultObject
-    })
+    });
 };
 
 const deleteUser = async (req: Request, res: Response) => {
