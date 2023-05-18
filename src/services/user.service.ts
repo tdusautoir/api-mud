@@ -77,14 +77,7 @@ export const createUser = async (user: IUserModel): Promise<CreateUserResult> =>
 
     if (!createdUser) {
         return new CreateUserResult(false, `Error creating user: ${user.username} cannot be found`, MudStatusCode.BAD_REQUEST, user);
-    }
-
-    // Création des stats
-    const createStatResult = await UserStatsService.createUserStats(createdUser._id);
-
-    if (!createStatResult.success) {
-        return new CreateUserResult(false, createStatResult.errorMessage, createStatResult.returnCode, createStatResult.resultObject);
-    }
+    }    
 
     // Send confirmation
     const createConfResult = await ConfirmationService.createUserAndConfirmation(user._id);

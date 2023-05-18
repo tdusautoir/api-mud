@@ -4,17 +4,17 @@ import mongoose, { Schema, Document } from 'mongoose';
 /**Statistiques de l'utilisateur */
 export interface IUserStats {
     userId: string;
-    playerRank: string;
+    playerRankId: string;
     mpCount: number;
-    playedSets: number;
     winSets: number;
     loseSets: number;
-    playedGames: number;
     winGames: number;
     loseGames: number;
     winGamesSuccession: number;
 
-    // Champs calculés
+    // Champs calculés    
+    playedSets: number;
+    playedGames: number;
     winSetsPercentage: number;
     winGamesPercentage: number;
 }
@@ -28,17 +28,12 @@ const UserStatsSchema: Schema = new Schema({
         required: true,
         unique: true
     },
-    playerRank: {
+    playerRankId: {
         type: String,
         ref: "Parameter",
         required: true
     },
     mpCount: {
-        type: Number,
-        required: true,
-        default: 0
-    },
-    playedSets: {
         type: Number,
         required: true,
         default: 0
@@ -49,11 +44,6 @@ const UserStatsSchema: Schema = new Schema({
         default: 0
     },
     loseSets: {
-        type: Number,
-        required: true,
-        default: 0
-    },
-    playedGames: {
         type: Number,
         required: true,
         default: 0
@@ -74,13 +64,25 @@ const UserStatsSchema: Schema = new Schema({
         default: 0
     },
     // Champs calculés dans le back
+    playedSets: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    playedGames: {
+        type: Number,
+        required: true,
+        default: 0
+    },
     winSetsPercentage: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
     winGamesPercentage: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     }    
 },
 { timestamps: true }

@@ -1,6 +1,6 @@
 import { MudStatusCode, RANK_BAD, RANK_KEY } from "../helpers/constants";
 import UserStats, { IUserStatsModel } from "../models/UserStats"
-import { CreateUserStatsResult } from "../models/results/userStats.results";
+import { CreateUserStatsResult, UpdateUserStatsResult } from "../models/results/userStats.results";
 import * as ParamService from "../services/parameter.service"
 import * as UserService from "../services/user.service"
 
@@ -11,6 +11,10 @@ export const getAllUserStats = async (): Promise<IUserStatsModel[]> => {
 export const getUserStatsByUserId = async (userId: string): Promise<IUserStatsModel | null> => {
     return await UserStats.findOne({ userId: userId});
 };
+
+export const getUserStatsById = async (statsId: string): Promise<IUserStatsModel | null> => {
+    return await UserStats.findById(statsId);
+}
 
 export const createUserStats = async (userId: string): Promise<CreateUserStatsResult> => {
     // Vérif du userId
@@ -37,7 +41,7 @@ export const createUserStats = async (userId: string): Promise<CreateUserStatsRe
     // Création
     const newStats = new UserStats({
         userId: userId,
-        playerRank: lowestRank
+        playerRankId: lowestRank._id
     });
 
     await UserStats.create(newStats);
@@ -50,4 +54,22 @@ export const createUserStats = async (userId: string): Promise<CreateUserStatsRe
     }
 
     return new CreateUserStatsResult(true, undefined, MudStatusCode.CREATED, createdStats);    
+}
+
+export const updateUserStats = async (statsId: string, model: IUserStatsModel): Promise<UpdateUserStatsResult> => {
+    const userStats = await getUserStatsById(statsId);
+
+    if (!userStats) {
+        return new UpdateUserStatsResult(false, `Could not find user stats to update with id ${statsId}`, MudStatusCode.NOT_FOUND);
+    }
+
+    const result = await UserStats.findOneAndUpdate({ _id: statsId }, model, { new: true });
+
+    const updatedUserStats = await getUserStatsById(statsId);
+
+    if (!updatedUserStats) {
+        return new UpdateUserStatsResult(false, `Coud not find updated user stats (id: ${statsId})`, MudStatusCode.NOT_FOUND);
+    }
+
+    return new UpdateUserStatsResult(true, undefined, MudStatusCode.OK, updatedUserStats);
 }

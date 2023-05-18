@@ -1,6 +1,7 @@
 import Confirmation, { IConfirmationModel } from '../models/Confirmation';
 import { transporter } from '../library/transporter';
 import * as UserService from '../services/user.service';
+import * as UserStatsService from '../services/userStats.service';
 import * as uuid from 'uuid';
 import Logging from '../library/Logging';
 import { MudStatusCode } from '../helpers/constants';
@@ -44,7 +45,6 @@ export const createUserAndConfirmation = async (currentUserId: string): Promise<
     return await createConfirmation(newConf);
 };
 
-// TODO : remplacer le type de retour par un ResultDTO
 export const verifyEmail = async (code: string): Promise<VerifyEmailResult> => {
     const conf = await getConfirmationByCode(code);
 
@@ -77,6 +77,13 @@ export const verifyEmail = async (code: string): Promise<VerifyEmailResult> => {
 
     if(!deleteConfResult.success) {
         return new VerifyEmailResult(false, deleteConfResult.errorMessage, deleteConfResult.returnCode)
+    }
+
+    // Création des stats
+    const createStatResult = await UserStatsService.createUserStats(conf.userId);
+
+    if (!createStatResult.success) {
+        return new VerifyEmailResult(false, createStatResult.errorMessage, createStatResult.returnCode, createStatResult.resultObject);
     }
 
     return new VerifyEmailResult(true, undefined, MudStatusCode.OK, user);
