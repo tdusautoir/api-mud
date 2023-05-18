@@ -3,7 +3,8 @@ import mongoose, { Schema, Document } from 'mongoose';
 /**Stats d'un utilisateur pour un mode de jeu précis */
 export interface IGamemodeStats {
     userId: string;
-    gamemode: string;
+    gamemodeId: string;
+    mpCount: number;
     playedMatches: number;
     victoryCount: number;
     defeatCount: number;
@@ -17,7 +18,7 @@ const GamemodeStatsSchema: Schema = new Schema({
         ref: "User",
         required: true
     },
-    gamemode: {
+    gamemodeId: {
         type: String,
         ref: "Parameter",
         required: true

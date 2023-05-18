@@ -28,7 +28,7 @@ export const createUserStats = async (userId: string): Promise<CreateUserStatsRe
     const existingStats = await getUserStatsByUserId(userId);
 
     if(existingStats) {
-        return new CreateUserStatsResult(false, `Stats already exists for user ${userId}`, MudStatusCode.BAD_REQUEST);
+        return new CreateUserStatsResult(false, `User stats already exist for user ${userId}`, MudStatusCode.BAD_REQUEST);
     }
 
     // Récupération du rang de base

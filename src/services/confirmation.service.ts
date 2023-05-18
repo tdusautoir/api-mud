@@ -2,11 +2,12 @@ import Confirmation, { IConfirmationModel } from '../models/Confirmation';
 import { transporter } from '../library/transporter';
 import * as UserService from '../services/user.service';
 import * as UserStatsService from '../services/userStats.service';
+import * as GamemodeStatsService from '../services/gamemodeStats.service';
 import * as uuid from 'uuid';
 import Logging from '../library/Logging';
-import { MudStatusCode } from '../helpers/constants';
-import User from '../models/User';
+import { GAMEMODE_KEY, MudStatusCode } from '../helpers/constants';
 import { CreateConfirmationResult, DeleteConfirmationResult, VerifyEmailResult } from '../models/results/confirmation.results';
+import * as ParamService from "../services/parameter.service";
 
 export const createUserAndConfirmation = async (currentUserId: string): Promise<CreateConfirmationResult> => {
     const verifCode = uuid.v4();
@@ -80,11 +81,23 @@ export const verifyEmail = async (code: string): Promise<VerifyEmailResult> => {
     }
 
     // Création des stats
+    // User Stats
     const createStatResult = await UserStatsService.createUserStats(conf.userId);
 
     if (!createStatResult.success) {
         return new VerifyEmailResult(false, createStatResult.errorMessage, createStatResult.returnCode, createStatResult.resultObject);
     }
+
+    // Gamemode Stats
+    const gamemodeList = await ParamService.getParametersByKey(GAMEMODE_KEY);
+
+    await gamemodeList.forEach(async gamemode => {
+        const createGamemodeStatsResult = await GamemodeStatsService.createGamemodeStats(conf.userId, gamemode._id);
+
+        if (!createGamemodeStatsResult.success) {
+            return new VerifyEmailResult(false, createGamemodeStatsResult.errorMessage, createGamemodeStatsResult.returnCode, createGamemodeStatsResult.resultObject);
+        }
+    });
 
     return new VerifyEmailResult(true, undefined, MudStatusCode.OK, user);
 };

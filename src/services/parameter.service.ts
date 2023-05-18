@@ -10,6 +10,10 @@ export const getSpecificParameter = async (key: string, value: string): Promise<
     return await Parameter.findOne({ cle: { $regex: new RegExp(key, 'i') }, valeur: { $regex: new RegExp(value, 'i') }});
 }
 
+export const getParameterById = async (paramId: string): Promise<IParameterModel | null> => {
+    return await Parameter.findById(paramId);
+}
+
 export const createParameter = async (key: string, value: string): Promise<CreateParamResult> => {
     // vérif existant
     const existingParam = await getSpecificParameter(key, value);

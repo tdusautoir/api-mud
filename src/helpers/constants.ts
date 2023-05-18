@@ -8,20 +8,13 @@ export enum MudStatusCode {
     INTERNAL_SERVER_ERROR = 500
 }
 
-const RANK_KEY = "RANK";
-const RANK_NONE = "NONE";
-const RANK_BRONZE = "BRONZE";
-const RANK_SILVER = "SILVER";
-const RANK_GOLD = "GOLD";
-const RANK_PLAT = "PLATINUM";
-const RANK_DIAMOND = "DIAMOND";
+export const RANK_KEY = "RANK";
+export const RANK_NONE = "NONE";
+export const RANK_BRONZE = "BRONZE";
+export const RANK_SILVER = "SILVER";
+export const RANK_GOLD = "GOLD";
+export const RANK_PLAT = "PLATINUM";
+export const RANK_DIAMOND = "DIAMOND";
 
-export {
-    RANK_KEY,
-    RANK_NONE,
-    RANK_BRONZE,
-    RANK_SILVER,
-    RANK_GOLD,
-    RANK_PLAT,
-    RANK_DIAMOND
-}
+export const GAMEMODE_KEY = "GAMEMODE";
+

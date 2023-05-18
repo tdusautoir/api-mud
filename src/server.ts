@@ -10,6 +10,7 @@ import userRoutes from './routes/user.route';
 import confirmationRoutes from './routes/confirmation.route'
 import parameterRoutes from './routes/parameter.route'
 import userStatsRoutes from './routes/userStats.route'
+import gamemodeStatsRoutes from './routes/gamemodeStats.route'
 
 // import middlewares
 import { auth } from "./middleware/auth";
@@ -51,6 +52,7 @@ app.use('/user', auth, userRoutes);
 app.use('/mail', confirmationRoutes);
 app.use('/param', parameterRoutes);
 app.use('/userstats', userStatsRoutes);
+app.use('/userstats', gamemodeStatsRoutes);
 
 /** HEALTHCHECK */
 app.get('/healthcheck', (req, res, next) => {
