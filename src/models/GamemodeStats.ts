@@ -22,6 +22,11 @@ const GamemodeStatsSchema: Schema = new Schema({
         ref: "Parameter",
         required: true
     },
+    mpCount: {
+        type: Number,
+        required: true,
+        default: 0
+    },
     playedMatches: {
         type: Number,
         required: true,

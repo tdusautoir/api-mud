@@ -9,15 +9,19 @@ export enum MudStatusCode {
 }
 
 const RANK_KEY = "RANK";
-const RANK_BAD = "BAD";
-const RANK_AVERAGE = "AVERAGE";
-const RANK_GOOD = "GOOD";
-const RANK_GOD = "GOD";
+const RANK_NONE = "NONE";
+const RANK_BRONZE = "BRONZE";
+const RANK_SILVER = "SILVER";
+const RANK_GOLD = "GOLD";
+const RANK_PLAT = "PLATINUM";
+const RANK_DIAMOND = "DIMAOND";
 
 export {
     RANK_KEY,
-    RANK_BAD,
-    RANK_AVERAGE,
-    RANK_GOOD,
-    RANK_GOD
+    RANK_NONE,
+    RANK_BRONZE,
+    RANK_SILVER,
+    RANK_GOLD,
+    RANK_PLAT,
+    RANK_DIAMOND
 }

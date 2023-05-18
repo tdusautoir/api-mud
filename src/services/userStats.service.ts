@@ -1,4 +1,4 @@
-import { MudStatusCode, RANK_BAD, RANK_KEY } from "../helpers/constants";
+import { MudStatusCode, RANK_KEY, RANK_NONE } from "../helpers/constants";
 import UserStats, { IUserStatsModel } from "../models/UserStats"
 import { CreateUserStatsResult, UpdateUserStatsResult } from "../models/results/userStats.results";
 import * as ParamService from "../services/parameter.service"
@@ -32,7 +32,7 @@ export const createUserStats = async (userId: string): Promise<CreateUserStatsRe
     }
 
     // Récupération du rang de base
-    const lowestRank = await ParamService.getSpecificParameter(RANK_KEY, RANK_BAD);
+    const lowestRank = await ParamService.getSpecificParameter(RANK_KEY, RANK_NONE);
 
     if(!lowestRank) {
         return new CreateUserStatsResult(false, `Error creating user stats : rank not found`, MudStatusCode.NOT_FOUND);
