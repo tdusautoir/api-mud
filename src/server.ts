@@ -52,7 +52,7 @@ app.use('/user', auth, userRoutes);
 app.use('/mail', confirmationRoutes);
 app.use('/param', parameterRoutes);
 app.use('/userstats', userStatsRoutes);
-app.use('/userstats', gamemodeStatsRoutes);
+app.use('/gamemodestats', gamemodeStatsRoutes);
 
 /** HEALTHCHECK */
 app.get('/healthcheck', (req, res, next) => {

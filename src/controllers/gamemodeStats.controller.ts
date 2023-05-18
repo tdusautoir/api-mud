@@ -39,8 +39,23 @@ const getGamemodeStatsById = async (req: Request, res: Response) => {
     }
 };
 
+const getSpecificGamemodeStatsByUserId = async (req: Request, res: Response) => {
+    const userId = req.params.userId;
+    const gamemodeId = req.params.gamemodeId;    
+
+    const stats = await GamemodeStatsService.getSpecificGamemodeStatsByUserId(userId, gamemodeId);
+
+    if(!stats) {
+        return res.status(MudStatusCode.NOT_FOUND).json({message: `No gamemode stats found for user ${userId} and gamemode ${gamemodeId}`});
+    }
+    else {
+        return res.status(MudStatusCode.OK).json(stats);
+    }
+}; 
+
 export default {
     getAllGamemodeStats,
     getGamemodeStatsByUserId,
-    getGamemodeStatsById
+    getGamemodeStatsById,
+    getSpecificGamemodeStatsByUserId
 }

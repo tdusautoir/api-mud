@@ -27,6 +27,19 @@ const getSpecificParameter = async (req: Request, res: Response) => {
     else {
         return res.status(MudStatusCode.NOT_FOUND).json({message: `No parameter found for key ${paramKey} and value ${paramVal}`});
     }
+};
+
+const getParameterById = async (req: Request, res: Response) => {
+    const paramId = req.params.paramId;
+
+    const param = await ParamService.getParameterById(paramId);
+
+    if(param) {
+        return res.status(MudStatusCode.OK).json(param);
+    }
+    else {
+        return res.status(MudStatusCode.NOT_FOUND).json({message: `No parameter found for id ${paramId}`});
+    }
 }
 
 const createParameter = async (req: Request, res: Response) => {
@@ -45,5 +58,6 @@ const createParameter = async (req: Request, res: Response) => {
 export default { 
     getParametersByKey,
     getSpecificParameter,
-    createParameter
+    createParameter,
+    getParameterById
 };

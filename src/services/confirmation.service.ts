@@ -91,13 +91,13 @@ export const verifyEmail = async (code: string): Promise<VerifyEmailResult> => {
     // Gamemode Stats
     const gamemodeList = await ParamService.getParametersByKey(GAMEMODE_KEY);
 
-    await gamemodeList.forEach(async gamemode => {
+    for(const gamemode of gamemodeList) {
         const createGamemodeStatsResult = await GamemodeStatsService.createGamemodeStats(conf.userId, gamemode._id);
 
         if (!createGamemodeStatsResult.success) {
             return new VerifyEmailResult(false, createGamemodeStatsResult.errorMessage, createGamemodeStatsResult.returnCode, createGamemodeStatsResult.resultObject);
         }
-    });
+    }
 
     return new VerifyEmailResult(true, undefined, MudStatusCode.OK, user);
 };
