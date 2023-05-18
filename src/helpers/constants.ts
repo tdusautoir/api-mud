@@ -14,7 +14,7 @@ const RANK_BRONZE = "BRONZE";
 const RANK_SILVER = "SILVER";
 const RANK_GOLD = "GOLD";
 const RANK_PLAT = "PLATINUM";
-const RANK_DIAMOND = "DIMAOND";
+const RANK_DIAMOND = "DIAMOND";
 
 export {
     RANK_KEY,
