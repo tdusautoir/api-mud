@@ -37,7 +37,9 @@ const GamemodeStatsSchema: Schema = new Schema({
         required: true,
         default: 0
     }
-});
+},
+{ timestamps: true }
+);
 
 export const GamemodeStatsModel = mongoose.model<IGamemodeStatsModel>('GamemodeStats', GamemodeStatsSchema);
 

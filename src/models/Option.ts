@@ -24,7 +24,9 @@ const OptionSchema: Schema = new Schema({
         ref: "Parameter",
         required: true
     },
-});
+},
+{ timestamps: true }
+);
 
 export const OptionModel = mongoose.model<IOptionModel>('Option', OptionSchema);
 

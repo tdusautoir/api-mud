@@ -25,7 +25,9 @@ const CharacterStatsSchema: Schema = new Schema({
         required: true,
         default: 0
     }
-});
+},
+{ timestamps: true }
+);
 
 export const CharacterStatsModel = mongoose.model<ICharacterStatsModel>('CharacterStats', CharacterStatsSchema);
 

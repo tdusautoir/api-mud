@@ -17,7 +17,9 @@ const ConfirmationSchema: Schema = new Schema({
         type: String,
         required: true
     }
-});
+},
+{ timestamps: true }
+);
 
 export const ConfirmationModel = mongoose.model<IConfirmationModel>('Confirmation', ConfirmationSchema);
 

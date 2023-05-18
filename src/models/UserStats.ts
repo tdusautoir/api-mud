@@ -81,8 +81,10 @@ const UserStatsSchema: Schema = new Schema({
     winGamesPercentage: {
         type: Number,
         required: true
-    }
-});
+    }    
+},
+{ timestamps: true }
+);
 
 export const UserStatsModel = mongoose.model<IUserStatsModel>('UserStats', UserStatsSchema);
 

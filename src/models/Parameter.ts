@@ -17,7 +17,9 @@ const ParameterSchema: Schema = new Schema({
         type: String,
         required: true
     }
-});
+},
+{ timestamps: true }
+);
 
 export const ParameterModel = mongoose.model<IParameterModel>('Parameter', ParameterSchema);
 
